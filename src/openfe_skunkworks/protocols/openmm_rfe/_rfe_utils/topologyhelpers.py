@@ -17,7 +17,7 @@ import numpy.typing as npt
 from openmm import app, System, NonbondedForce
 from openmm import unit as omm_unit
 from openff.units import unit
-from openfe import SolventComponent
+from openfe_skunkworks import SolventComponent
 
 
 logger = logging.getLogger(__name__)

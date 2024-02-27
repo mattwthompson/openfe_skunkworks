@@ -58,7 +58,7 @@ from .equil_rfe_settings import (
     IntegratorSettings, MultiStateOutputSettings,
     OpenFFPartialChargeSettings,
 )
-from openfe.protocols.openmm_utils.omm_settings import (
+from openfe_skunkworks.protocols.openmm_utils.omm_settings import (
     BasePartialChargeSettings,
 )
 from ..openmm_utils import (
@@ -68,7 +68,7 @@ from ..openmm_utils import (
 from . import _rfe_utils
 from ...utils import without_oechem_backend, log_system_probe
 from ...analysis import plotting
-from openfe.due import due, Doi
+from openfe_skunkworks.due import due, Doi
 
 
 logger = logging.getLogger(__name__)

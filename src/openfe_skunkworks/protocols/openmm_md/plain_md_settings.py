@@ -7,7 +7,7 @@ This module implements the settings necessary to run MD simulations using
 :class:`openfe.protocols.openmm_md.plain_md_methods.py`
 
 """
-from openfe.protocols.openmm_utils.omm_settings import (
+from openfe_skunkworks.protocols.openmm_utils.omm_settings import (
     Settings,
     OpenMMSolvationSettings,
     OpenMMEngineSettings,

@@ -48,7 +48,7 @@ from gufe import (
     ChemicalSystem, SmallMoleculeComponent,
     ProteinComponent, SolventComponent
 )
-from openfe.protocols.openmm_afe.equil_afe_settings import (
+from openfe_skunkworks.protocols.openmm_afe.equil_afe_settings import (
     AbsoluteSolvationSettings,
     OpenMMSolvationSettings, AlchemicalSettings, LambdaSettings,
     MDSimulationSettings, MDOutputSettings,
@@ -59,8 +59,8 @@ from openfe.protocols.openmm_afe.equil_afe_settings import (
 )
 from ..openmm_utils import system_validation, settings_validation
 from .base import BaseAbsoluteUnit
-from openfe.utils import log_system_probe
-from openfe.due import due, Doi
+from openfe_skunkworks.utils import log_system_probe
+from openfe_skunkworks.due import due, Doi
 
 
 due.cite(Doi("10.5281/zenodo.596504"),

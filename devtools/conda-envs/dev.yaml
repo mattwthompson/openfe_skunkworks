@@ -1,0 +1,13 @@
+name: shunkworks-dev
+channels:
+  - conda-forge
+dependencies:
+  - gufe
+  - mdtraj
+  - numpy
+  - openmm
+  - openmmtools
+  - openmmforcefields
+  - openff-models
+  - openff-units
+  - openff-toolkit

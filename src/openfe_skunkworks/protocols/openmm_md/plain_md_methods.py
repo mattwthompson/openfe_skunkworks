@@ -27,15 +27,15 @@ import time
 import numpy as np
 import mdtraj
 from mdtraj.reporters import XTCReporter
-from openfe.utils import without_oechem_backend, log_system_probe
+from openfe_skunkworks.utils import without_oechem_backend, log_system_probe
 from gufe import (
     settings, ChemicalSystem, SmallMoleculeComponent,
     ProteinComponent, SolventComponent
 )
-from openfe.protocols.openmm_utils.omm_settings import (
+from openfe_skunkworks.protocols.openmm_utils.omm_settings import (
     BasePartialChargeSettings,
 )
-from openfe.protocols.openmm_md.plain_md_settings import (
+from openfe_skunkworks.protocols.openmm_md.plain_md_settings import (
     PlainMDProtocolSettings,
     OpenFFPartialChargeSettings,
     OpenMMSolvationSettings, OpenMMEngineSettings,
@@ -43,8 +43,8 @@ from openfe.protocols.openmm_md.plain_md_settings import (
 )
 from openff.toolkit.topology import Molecule as OFFMolecule
 
-from openfe.protocols.openmm_rfe._rfe_utils import compute
-from openfe.protocols.openmm_utils import (
+from openfe_skunkworks.protocols.openmm_rfe._rfe_utils import compute
+from openfe_skunkworks.protocols.openmm_utils import (
     system_validation, settings_validation, system_creation,
     charge_generation,
 )

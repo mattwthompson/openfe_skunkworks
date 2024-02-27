@@ -20,7 +20,7 @@ from gufe.settings import (
     OpenMMSystemGeneratorFFSettings,
     ThermoSettings,
 )
-from openfe.protocols.openmm_utils.omm_settings import (
+from openfe_skunkworks.protocols.openmm_utils.omm_settings import (
     MultiStateSimulationSettings,
     BaseSolvationSettings,
     OpenMMSolvationSettings,

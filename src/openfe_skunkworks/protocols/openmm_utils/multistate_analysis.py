@@ -11,7 +11,7 @@ import numpy.typing as npt
 from openmmtools import multistate
 from openff.units import unit, ensure_quantity
 from pymbar.utils import ParameterError
-from openfe.analysis import plotting
+from openfe_skunkworks.analysis import plotting
 from typing import Optional, Union
 
 

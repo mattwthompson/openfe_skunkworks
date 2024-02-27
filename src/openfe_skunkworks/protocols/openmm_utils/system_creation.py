@@ -17,7 +17,7 @@ from gufe.settings import OpenMMSystemGeneratorFFSettings, ThermoSettings
 from gufe import (
     Component, ProteinComponent, SolventComponent, SmallMoleculeComponent
 )
-from openfe.protocols.openmm_utils.omm_settings import (
+from openfe_skunkworks.protocols.openmm_utils.omm_settings import (
     IntegratorSettings,
     OpenMMSolvationSettings,
 )
