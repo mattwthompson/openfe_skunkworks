@@ -3,6 +3,7 @@ channels:
   - conda-forge
 dependencies:
   - gufe
+  - openfe
   - mdtraj
   - numpy
   - openmm

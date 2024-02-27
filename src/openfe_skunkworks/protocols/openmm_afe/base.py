@@ -35,7 +35,7 @@ from gufe import (
     SolventComponent,
 )
 from gufe.components import Component
-from openfe_skunkworks.protocols.openmm_afe.equil_afe_settings import (
+from openfe.protocols.openmm_afe.equil_afe_settings import (
     BaseSolvationSettings,
     IntegratorSettings,
     MultiStateOutputSettings,
@@ -44,13 +44,13 @@ from openfe_skunkworks.protocols.openmm_afe.equil_afe_settings import (
     OpenMMEngineSettings,
     ThermoSettings,
 )
-from openfe_skunkworks.protocols.openmm_md.plain_md_methods import PlainMDProtocolUnit
-from openfe_skunkworks.protocols.openmm_rfe._rfe_utils import compute
-from openfe_skunkworks.protocols.openmm_utils.omm_settings import (
+from openfe.protocols.openmm_md.plain_md_methods import PlainMDProtocolUnit
+from openfe.protocols.openmm_rfe._rfe_utils import compute
+from openfe.protocols.openmm_utils.omm_settings import (
     BasePartialChargeSettings,
     SettingsBaseModel,
 )
-from openfe_skunkworks.utils import without_oechem_backend
+from openfe.utils import without_oechem_backend
 from openff.models.types import ArrayQuantity
 from openff.toolkit import ForceField
 from openff.toolkit import Molecule as OFFMolecule
