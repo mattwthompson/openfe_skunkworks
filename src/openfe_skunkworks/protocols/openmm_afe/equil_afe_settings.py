@@ -31,7 +31,9 @@ from openfe.protocols.openmm_utils.omm_settings import (
     MDSimulationSettings,
     MDOutputSettings,
 )
+from ..openmm_utils.omm_settings import PackmolSolvationSettings
 import numpy as np
+from typing import Union
 
 try:
     from pydantic.v1 import validator
@@ -141,7 +143,7 @@ class AbsoluteSolvationSettings(SettingsBaseModel):
     thermo_settings: ThermoSettings
     """Settings for thermodynamic parameters"""
 
-    solvation_settings: BaseSolvationSettings
+    solvation_settings: Union[PackmolSolvationSettings, OpenMMSolvationSettings]
     """Settings for solvating the system."""
 
     # Alchemical settings
