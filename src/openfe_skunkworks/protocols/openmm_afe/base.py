@@ -631,10 +631,7 @@ class BaseAbsoluteUnit(gufe.ProtocolUnit):
         comp_resids : dict[str, npt.NDArray]
           A dictionary of residues for each component in the System.
         """
-        use_interchange = (
-            (protein_component is None) and 
-            (len(smc_components) == 1)
-        )
+        use_interchange = not isinstance(settings['solvation_settings'], OpenMMSolvationSettings)
 
         if use_interchange:
             # TODO: See if the base class can really support both cases
