@@ -68,6 +68,7 @@ from ..openmm_utils import (
     settings_validation, system_creation,
     multistate_analysis, charge_generation
 )
+from ..openmm_utils.omm_settings import PackmolSolvationSettings
 from openfe.utils import without_oechem_backend
 
 
@@ -631,7 +632,7 @@ class BaseAbsoluteUnit(gufe.ProtocolUnit):
         comp_resids : dict[str, npt.NDArray]
           A dictionary of residues for each component in the System.
         """
-        use_interchange = not isinstance(settings['solvation_settings'], OpenMMSolvationSettings)
+        use_interchange = isinstance(settings['solvation_settings'], PackmolSolvationSettings)
 
         if use_interchange:
             # TODO: See if the base class can really support both cases
