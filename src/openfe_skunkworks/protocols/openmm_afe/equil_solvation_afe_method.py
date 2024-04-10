@@ -48,7 +48,7 @@ from gufe import (
     ChemicalSystem, SmallMoleculeComponent,
     ProteinComponent, SolventComponent
 )
-from openfe.protocols.openmm_afe.equil_afe_settings import (
+from openfe_skunkworks.protocols.openmm_afe.equil_afe_settings import (
     AbsoluteSolvationSettings,
     OpenMMSolvationSettings, AlchemicalSettings, LambdaSettings,
     MDSimulationSettings, MDOutputSettings,
