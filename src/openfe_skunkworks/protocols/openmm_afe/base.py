@@ -593,7 +593,9 @@ class BaseAbsoluteUnit(gufe.ProtocolUnit):
 
         return (
             interchange.to_openmm_topology(),
-            interchange.to_openmm_system(),
+            interchange.to_openmm_system(
+                hydrogen_mass=settings['forcefield_settings'].hydrogen_mass,
+            ),
             interchange.positions.to_openmm(),
             component_resids,
         )
@@ -635,6 +637,7 @@ class BaseAbsoluteUnit(gufe.ProtocolUnit):
         use_interchange = isinstance(settings['solvation_settings'], PackmolSolvationSettings)
 
         if use_interchange:
+            print('Using Interchange solvation routine')
             # TODO: See if the base class can really support both cases
             return self._get_omm_objects_via_interchange(
                 protein_component=protein_component,
@@ -643,25 +646,25 @@ class BaseAbsoluteUnit(gufe.ProtocolUnit):
                 settings=settings,
             )
         else:
-          system_generator = self._get_system_generator(
-              settings=settings, solvent_comp=solvent_component,
-          )
+            print('Using OpenMM solvation routine')
+            system_generator = self._get_system_generator(
+                settings=settings, solvent_comp=solvent_component,
+            )
 
-          system_modeller, comp_resids = self._get_modeller(
-              protein_component=protein_component,
-              solvent_component=solvent_component,
-              smc_components=smc_components,
-              system_generator=system_generator,
-              partial_charge_settings=settings['charge_settings'],
-              solvation_settings=settings['solvation_settings'],
-          )
+            system_modeller, comp_resids = self._get_modeller(
+                protein_component=protein_component,
+                solvent_component=solvent_component,
+                smc_components=smc_components,
+                system_generator=system_generator,
+                partial_charge_settings=settings['charge_settings'],
+                solvation_settings=settings['solvation_settings'],
+            )
 
-          return *self._get_omm_objects_via_openmmforcefields(
-              modeller=system_modeller,
-              system_generator=system_generator,
-              smc_components=list(smc_components.values()),
-          ), comp_resids
-
+            return *self._get_omm_objects_via_openmmforcefields(
+                modeller=system_modeller,
+                system_generator=system_generator,
+                smc_components=list(smc_components.values()),
+                ), comp_resids
 
     def _get_lambda_schedule(
         self, settings: dict[str, SettingsBaseModel]
