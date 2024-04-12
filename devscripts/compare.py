@@ -478,11 +478,16 @@ def compare_solvated_systems(
         if round(system1.getParticleMass(particle_index)._value) not in (1, 16):
             break
 
+    # TODO: different systems will have different numbers of particles, probably
+    #       the only way to compare is just use the indices present in both systems?
     water_particle_range = list(range(number_ligand_atoms, particle_index))
 
     # allow sigmas to be different, since they don't matter
     compare_nonbonded_forces(
-        system1, system2, water_particle_range, allow_unequal_sigma=True
+        system1,
+        system2,
+        water_particle_range,
+        allow_unequal_sigma=True,
     )
 
 
