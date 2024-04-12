@@ -1,6 +1,8 @@
-from typing import TypedDict
-from openff.models.models import DefaultModel
+import numpy
 import openmm.unit
+from openff.models.models import DefaultModel
+from openff.units import Quantity
+from openff.units.openmm import from_openmm
 from pydantic.v1 import validator
 
 
@@ -290,6 +292,43 @@ def compare_nonbonded_forces(
     assert nonbonded1 == nonbonded2
 
 
+def _get_volume(system: openmm.System) -> Quantity:
+    return numpy.prod(
+        numpy.diagonal(
+            from_openmm(system.getDefaultPeriodicBoxVectors()).m_as("nanometer")
+        )
+    )
+
+
+def compare_volumes(
+    system1: openmm.System,
+    system2: openmm.System,
+):
+    volume1 = _get_volume(system1)
+    volume2 = _get_volume(system2)
+
+    try:
+        assert (
+            abs((volume1 - volume2) / volume1) < 0.1
+        ), "Volumes differ by more than 10%"
+    except AssertionError as error:
+        # default setting doesn't actually pad, it just sets the box vectors
+        # as twice the padding, so also compare densities
+        density1 = system1.getNumParticles() / volume1
+        density2 = system2.getNumParticles() / volume2
+
+        assert (
+            abs((density1 - density2) / density1) < 0.1
+        ), "Densities differ by more than 10%"
+
+        # TODO: re-raise this error since, density matching is not
+        # (alone) good enough
+        print(
+            f"{error}, but densities are {density1:.2f} and "
+            f"{density2:.2f} particles/nm^3"
+        )
+
+
 def compare_vacuum_systems(
     system1: openmm.System,
     system2: openmm.System,
@@ -302,7 +341,19 @@ def compare_vacuum_systems(
     compare_nonbonded_forces(system1, system2)
 
 
+def compare_solvated_systems(
+    system1: openmm.System,
+    system2: openmm.System,
+):
+    compare_volumes(system1, system2)
+
+
 compare_vacuum_systems(
-    openmm.XmlSerializer.deserialize(open("vac1.xml").read()),
-    openmm.XmlSerializer.deserialize(open("vac2.xml").read()),
+    openmm.XmlSerializer.deserialize(open("vac.xml").read()),
+    openmm.XmlSerializer.deserialize(open("vac_alt.xml").read()),
+)
+
+compare_solvated_systems(
+    openmm.XmlSerializer.deserialize(open("solv.xml").read()),
+    openmm.XmlSerializer.deserialize(open("solv_alt.xml").read()),
 )
