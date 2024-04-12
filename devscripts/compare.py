@@ -128,10 +128,14 @@ def compare_masses(
 def compare_constraints(
     system1: openmm.System,
     system2: openmm.System,
+    particle_range: None | list[int] = None,
 ):
-    assert (
-        system1.getNumConstraints() == system2.getNumConstraints()
-    ), "Number of constraints differ"
+    if particle_range is None:
+        assert (
+            system1.getNumConstraints() == system2.getNumConstraints()
+        ), "Number of constraints differ"
+
+        particle_range = list(range(system1.getNumParticles()))
 
     for constraint_index in range(system1.getNumConstraints()):
         constraint1 = Constraint.from_openmm(
@@ -141,6 +145,12 @@ def compare_constraints(
         constraint2 = Constraint.from_openmm(
             system2.getConstraintParameters(constraint_index)
         )
+
+        if any([index not in particle_range for index in constraint1.particles]):
+            continue
+
+        if any([index not in particle_range for index in constraint1.particles]):
+            continue
 
         assert constraint1 == constraint2
 
@@ -339,23 +349,33 @@ def compare_nonbonded_forces(
         if not allow_unequal_sigma:
             raise error
         else:
-            nonbonded1 = [[charge, epsilon] for charge, _, epsilon in nonbonded1]
+            # This code block is pretty much written for the case of (rigid) water, in which
+            # 1. sigma on hydrogens mean nothing since epsilon is 0
+            # 2. epsilon values can't really be trusted past 0.001 kJ/mol
+            #     https://github.com/openforcefield/openff-forcefields/pull/57#issuecomment-1289566862
+            nonbonded1 = [
+                [round(charge._value, 3), 0.0, round(epsilon._value, 3)]
+                if epsilon._value == 0.0
+                else [
+                    round(charge._value, 3),
+                    round(sigma._value, 4),
+                    round(epsilon._value, 3),
+                ]
+                for charge, sigma, epsilon in nonbonded1
+            ]
 
-            nonbonded2 = [[charge, epsilon] for charge, _, epsilon in nonbonded2]
+            nonbonded2 = [
+                [round(charge._value, 3), 0.0, round(epsilon._value, 3)]
+                if epsilon._value == 0.0
+                else [
+                    round(charge._value, 3),
+                    round(sigma._value, 4),
+                    round(epsilon._value, 3),
+                ]
+                for charge, sigma, epsilon in nonbonded2
+            ]
 
-            assert nonbonded1 == nonbonded2
-
-
-def compare_vacuum_systems(
-    system1: openmm.System,
-    system2: openmm.System,
-):
-    compare_masses(system1, system2)
-    compare_constraints(system1, system2)
-    compare_bond_forces(system1, system2)
-    compare_angle_forces(system1, system2)
-    compare_torsion_forces(system1, system2)
-    compare_nonbonded_forces(system1, system2)
+            assert nonbonded1 == nonbonded2, (nonbonded1, nonbonded2)
 
 
 def _get_volume(system: openmm.System) -> Quantity:
@@ -387,11 +407,10 @@ def compare_volumes(
             abs((density1 - density2) / density1) < 0.1
         ), "Densities differ by more than 10%"
 
-        # TODO: re-raise this error since, density matching is not
-        # (alone) good enough
+        # TODO: re-raise this error if density matching is not (alone) good enough
         print(
-            f"{error}, but densities are {density1:.2f} and "
-            f"{density2:.2f} particles/nm^3"
+            f"{error}, but densities are close "
+            f"({density1:.2f} and {density2:.2f} particles/nm^3)"
         )
 
 
@@ -422,6 +441,18 @@ def find_number_ligand_atoms(system: openmm.System) -> int:
     raise Exception("Couldn't find 10 water atoms, ordered OHH, after a ligand")
 
 
+def compare_vacuum_systems(
+    system1: openmm.System,
+    system2: openmm.System,
+):
+    compare_masses(system1, system2)
+    compare_constraints(system1, system2)
+    compare_bond_forces(system1, system2)
+    compare_angle_forces(system1, system2)
+    compare_torsion_forces(system1, system2)
+    compare_nonbonded_forces(system1, system2)
+
+
 def compare_solvated_systems(
     system1: openmm.System,
     system2: openmm.System,
@@ -436,6 +467,7 @@ def compare_solvated_systems(
     # ligand forces
     ligand_particle_range = list(range(number_ligand_atoms))
 
+    compare_constraints(system1, system2, ligand_particle_range)
     compare_bond_forces(system1, system2, ligand_particle_range)
     compare_angle_forces(system1, system2, ligand_particle_range)
     compare_torsion_forces(system1, system2, ligand_particle_range)
