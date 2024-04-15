@@ -290,7 +290,10 @@ def compare_nonbonded_settings(
     assert force1.getCutoffDistance() == force2.getCutoffDistance(), "Cutoffs differ!"
 
     if not skip_switching_check:
-        assert force1.getUseSwitchingFunction() == force2.getUseSwitchingFunction()
+        assert (
+            force1.getUseSwitchingFunction() == force2.getUseSwitchingFunction()
+        ), "One force uses a switching function, the other doesn't!"
+
         assert (
             force1.getSwitchingDistance() == force2.getSwitchingDistance()
         ), "Switching distances differ!"
@@ -329,7 +332,7 @@ def compare_nonbonded_forces(
     compare_nonbonded_settings(
         non_bonded_force1,
         non_bonded_force2,
-        skip_switching_check=True,
+        skip_switching_check=False,
     )
 
     nonbonded1 = [
