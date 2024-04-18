@@ -102,10 +102,6 @@ def validate_solvent(state: ChemicalSystem, nonbonded_method: str):
         errmsg = "Multiple SolventComponent found, only one is supported"
         raise ValueError(errmsg)
 
-    if len(solv) > 0 and solv[0].smiles != 'O':
-        errmsg = "Non water solvent is not currently supported"
-        raise ValueError(errmsg)
-
 
 def validate_protein(state: ChemicalSystem):
     """
